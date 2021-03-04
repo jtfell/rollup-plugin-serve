@@ -35,6 +35,13 @@ function serve (options = { contentBase: '' }) {
     // Don't allow path traversal
     const urlPath = posix.normalize(unsafePath)
 
+    if (options.customRoute) {
+      const [method, url, handler] = options.customRoute
+      if (urlPath === url && request.method === method) {
+        return handler(request, response)
+      }
+    }
+
     Object.keys(options.headers).forEach((key) => {
       response.setHeader(key, options.headers[key])
     })
